@@ -53,6 +53,8 @@ var mixin = function (target, source, non_agg) {
  * @param {Object} options: A hash of options for the client.
  */
 var Client = exports.Client = function (options) {
+  options = options || {};
+
   this.host     = options.host;
   this.secure   = options.secure   || false;
   this.port     = options.port     || (this.secure ? 443 : 80);
@@ -163,7 +165,10 @@ Client.prototype._request = function (method, options, callback) {
     request.write(options.body);
   }
 
-  request.end();
+  options.end = 'undefined' === typeof options.end ? true : options.end;
+  if (options.end) {
+    request.end();
+  }
 
   return request;
 };
