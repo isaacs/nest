@@ -32,7 +32,8 @@ var Client = exports.Client = function (options) {
   this.secure = options.secure || false;
   this.host   = options.host;
   this.port   = options.port   || (this.secure ? 443 : 80);
-  this.path   = options.path   || '';
+  this.path   = options.path   || '/';
+  this.type   = options.type   || '';
 
   this._http = this.secure ? require('https') : require('http');
 };
@@ -54,9 +55,11 @@ exports.createClient = function (options) {
  * @private
  */
 Client.prototype._request = function (method, options, callback) {
+  options.path     = this.path + options.path;
   options.headers  = options.headers  || {};
   options.encoding = 'undefined' !== typeof options.encoding ?
                      options.encoding : 'utf8';
+
 
   if (options.params) {
     if ('object' === typeof options.params) {
@@ -66,6 +69,7 @@ Client.prototype._request = function (method, options, callback) {
     }
   }
 
+  options.type = options.type || this.type;
   if ('object' === typeof options.body) {
     if ('json' === options.type) {
       options.headers['Content-Type'] = 'application/json';
@@ -79,9 +83,6 @@ Client.prototype._request = function (method, options, callback) {
   if (options.body) {
     options.headers['Content-Length'] = Buffer.byteLength(options.body);
   }
-
-  console.log(this.host, this.port);
-  console.log(options);
 
   var request = this._http.request({
     host:    this.host,
@@ -99,6 +100,14 @@ Client.prototype._request = function (method, options, callback) {
       });
 
       response.on('end', function () {
+        if ('json' === options.response) {
+          try {
+            body = JSON.parse(body);
+          } catch (error) {
+            return callback(error);
+          }
+        }
+
         if (callback) {
           callback(null, response, body);
         }
