@@ -25,7 +25,8 @@ module.exports = {
         throw error;
       }
 
-      console.log(body);
+      assert.ok(body.repository);
+
       done();
     });
   }
