@@ -23,17 +23,44 @@
 var querystring = require('querystring');
 
 /**
+ * Mix two objects together.
+ *
+ * @param {Object} target
+ * @param {Object} source
+ * @param {Boolean} non_agg: Aggressively mixin?
+ */
+var mixin = function (target, source, non_agg) {
+  var keys = Object.keys(source),
+      key;
+
+  for (var i = 0, il = keys.length; i < il; i++) {
+    key = keys[i];
+
+    if (non_agg) {
+      if (!Object.hasOwnProperty(target, key)) {
+        target[key] = source[key];
+      }
+    } else {
+      target[key] = source[key];
+    }
+  }
+};
+
+/**
  * The HTTP REST Client prototype, the main export.
  *
  * @constructor
  * @param {Object} options: A hash of options for the client.
  */
 var Client = exports.Client = function (options) {
-  this.secure = options.secure || false;
-  this.host   = options.host;
-  this.port   = options.port   || (this.secure ? 443 : 80);
-  this.path   = options.path   || '/';
-  this.type   = options.type   || '';
+  this.host     = options.host;
+  this.secure   = options.secure   || false;
+  this.port     = options.port     || (this.secure ? 443 : 80);
+  this.path     = options.path     || '/';
+  this.headers  = options.headers  || {};
+  this.params   = options.params;
+  this.type     = options.type;
+  this.response = options.response;
 
   this._http = this.secure ? require('https') : require('http');
 };
@@ -56,13 +83,20 @@ exports.createClient = function (options) {
  */
 Client.prototype._request = function (method, options, callback) {
   options.path     = this.path + options.path;
-  options.headers  = options.headers  || {};
+  options.headers  = options.headers  || this.headers;
   options.encoding = 'undefined' !== typeof options.encoding ?
                      options.encoding : 'utf8';
+  options.response = options.response || this.response;
 
+  if (options.params || this.params) {
+    if (!options.params) {
+      options.params = this.params;
+    }
 
-  if (options.params) {
     if ('object' === typeof options.params) {
+      if (this.params) {
+        mixin(options.params, this.params);
+      }
       options.path += '?' + querystring.stringify(options.params);
     } else {
       options.path += '?' + options.params;
