@@ -177,6 +177,11 @@ Client.prototype._request = function (method, options, callback) {
    * @param {Function} callback
    */
   Client.prototype[verb.toLowerCase()] = function (path, options, callback) {
+    if ('function' === typeof options) {
+      callback = options;
+      options  = null;
+    }
+
     options      = options || {};
     options.path = path;
 
