@@ -118,6 +118,10 @@ Client.prototype._request = function (method, options, callback) {
 
   if (options.body) {
     options.headers['Content-Length'] = Buffer.byteLength(options.body);
+  } else if ('DELETE' === method ||
+             'PUT' === method    ||
+             'POST' === method) {
+    options.headers['Content-Length'] = '0';
   }
 
   var request = this._http.request({
@@ -177,6 +181,8 @@ Client.prototype._request = function (method, options, callback) {
 };
 
 ['GET', 'POST', 'PUT', 'DELETE'].forEach(function (verb) {
+  var lower_verb = verb.toLowerCase();
+
   /**
    * Wrappers around _request.
    *
@@ -184,7 +190,7 @@ Client.prototype._request = function (method, options, callback) {
    * @param {Object} options
    * @param {Function} callback
    */
-  Client.prototype[verb.toLowerCase()] = function (path, options, callback) {
+  Client.prototype[lower_verb] = function (path, options, callback) {
     if ('function' === typeof options) {
       callback = options;
       options  = null;
