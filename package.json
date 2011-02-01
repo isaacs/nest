@@ -1,0 +1,20 @@
+{
+  "name": "nest",
+  "version": "0.0.3",
+  "description": "A Node HTTP client aimed at REST API's.",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/votizen/nest.git"
+  },
+  "main": "./",
+  "bugs": {
+    "web": "http://github.com/votizen/nest/issues"
+  },
+  "author": "Tim Smart <tim@fostle.com>",
+  "licenses": [{
+    "type": "MIT"
+  }],
+  "engines": {
+    "node": ">=0.3.6"
+  }
+}
