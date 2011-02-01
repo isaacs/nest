@@ -129,6 +129,13 @@ Client.prototype._request = function (method, options, callback) {
   }, function (response) {
     if (options.encoding) {
       response.setEncoding(options.encoding);
+    }
+
+    if (!options.encoding || options.stream) {
+      if (callback) {
+        callback(null, response, null);
+      }
+    } else {
       var body = '';
 
       response.on('data', function (data) {
@@ -148,10 +155,6 @@ Client.prototype._request = function (method, options, callback) {
           callback(null, response, body);
         }
       });
-    } else {
-      if (callback) {
-        callback(null, response, null);
-      }
     }
   });
 
