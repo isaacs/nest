@@ -1,6 +1,6 @@
 {
   "name": "nest",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A Node HTTP client aimed at REST API's.",
   "repository": {
     "type": "git",

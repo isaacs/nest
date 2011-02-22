@@ -95,29 +95,31 @@ Client.prototype._request = function (method, options, callback) {
       options.params = this.params;
     }
 
-    if ('object' === typeof options.params) {
-      if (this.params) {
-        mixin(options.params, this.params);
-      }
-      options.path += '?' + querystring.stringify(options.params);
-    } else {
-      options.path += '?' + options.params;
+    if (this.params) {
+      mixin(options.params, this.params);
     }
+
+    options.path += '?' + querystring.stringify(options.params);
   }
 
   options.type = options.type || this.type;
   if ('object' === typeof options.body) {
     if ('json' === options.type) {
-      options.headers['Content-Type'] = 'application/json';
       options.body = JSON.stringify(options.body);
     } else {
-      options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+      options.type = 'form';
       options.body = querystring.stringify(options.body);
     }
   }
 
   if (options.body) {
     options.headers['Content-Length'] = Buffer.byteLength(options.body);
+
+    if ('json' === options.type) {
+      options.headers['Content-Type'] = 'application/json';
+    } else if ('form' === options.type) {
+      options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+    }
   } else if ('DELETE' === method ||
              'PUT' === method    ||
              'POST' === method) {
