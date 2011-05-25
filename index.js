@@ -83,8 +83,8 @@ exports.createClient = function (options) {
  * @param {Function} callback
  * @private
  */
-Client.prototype._request = function (method, options, callback) {
-  options.path     = this.path + options.path;
+Client.prototype._request = function (method, path, options, callback) {
+  options.path     = this.path + path;
   options.headers  = options.headers  || this.headers;
   options.encoding = 'undefined' !== typeof options.encoding ?
                      options.encoding : 'utf8';
@@ -196,9 +196,8 @@ Client.prototype._request = function (method, options, callback) {
       options  = null;
     }
 
-    options      = options || {};
-    options.path = path;
+    options = options || {};
 
-    return this._request(verb, options, callback);
+    return this._request(verb, path, options, callback);
   };
 });
