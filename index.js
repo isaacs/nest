@@ -120,9 +120,7 @@ Client.prototype._request = function (method, options, callback) {
     } else if ('form' === options.type) {
       options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
     }
-  } else if ('DELETE' === method ||
-             'PUT' === method    ||
-             'POST' === method) {
+  } else if ('GET' !== method) {
     options.headers['Content-Length'] = '0';
   }
 
@@ -182,7 +180,7 @@ Client.prototype._request = function (method, options, callback) {
   return request;
 };
 
-['GET', 'POST', 'PUT', 'DELETE'].forEach(function (verb) {
+['GET', 'POST', 'PUT', 'DELETE', 'PATCH'].forEach(function (verb) {
   var lower_verb = verb.toLowerCase();
 
   /**
