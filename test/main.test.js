@@ -10,6 +10,7 @@ module.exports = {
     assert.equal('function', typeof c.post);
     assert.equal('function', typeof c.put);
     assert.equal('function', typeof c.delete);
+    assert.equal('function', typeof c.patch);
   },
   "test defaults": function () {
     assert.equal(80, c.port);

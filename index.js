@@ -84,11 +84,12 @@ exports.createClient = function (options) {
  * @private
  */
 Client.prototype._request = function (method, path, options, callback) {
-  options.path     = this.path + path;
-  options.headers  = options.headers  || this.headers;
-  options.encoding = 'undefined' !== typeof options.encoding ?
-                     options.encoding : 'utf8';
-  options.response = options.response || this.response;
+  options          || (options = {})
+  options.path     =  this.path + path;
+  options.headers  =  options.headers  || this.headers;
+  options.encoding =  'undefined' !== typeof options.encoding ?
+                      options.encoding : 'utf8';
+  options.response =  options.response || this.response;
 
   if (options.params || this.params) {
     if (!options.params) {
@@ -195,8 +196,6 @@ Client.prototype._request = function (method, path, options, callback) {
       callback = options;
       options  = null;
     }
-
-    options = options || {};
 
     return this._request(verb, path, options, callback);
   };
