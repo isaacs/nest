@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-var querystring = require('./deps/querystring');
+var querystring = require('querystring');
 
 /**
  * Mix two objects together.
