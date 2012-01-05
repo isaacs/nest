@@ -4,17 +4,17 @@
   "description": "A Node HTTP client aimed at REST API's.",
   "repository": {
     "type": "git",
-    "url": "http://github.com/votizen/nest.git"
+    "url": "http://github.com/tim-smart/nest.git"
   },
   "main": "./",
   "bugs": {
-    "web": "http://github.com/votizen/nest/issues"
+    "url": "http://github.com/tim-smart/nest/issues"
   },
   "author": "Tim Smart <tim@fostle.com>",
   "licenses": [{
     "type": "MIT"
   }],
   "engines": {
-    "node": ">=0.4.0"
+    "node": "0.6.x"
   }
 }
